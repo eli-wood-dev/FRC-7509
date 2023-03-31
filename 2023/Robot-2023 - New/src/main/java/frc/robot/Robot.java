@@ -461,7 +461,6 @@ public class Robot extends TimedRobot implements Constants {
   public void teleopPeriodic() {
 
     safety = SmartDashboard.getBoolean("soft limits", true);//check if safety is on
-
     // drive the robot (driver)
 
     //driveAction(xBoxDriver.getLeftY() * .55,xBoxDriver.getRightY() * .55);
@@ -551,7 +550,7 @@ public class Robot extends TimedRobot implements Constants {
       if      (position <= minPosition) speed = Math.max(0.0, speed); // must be positive
       else if (position >= maxPosition) speed = Math.min(0.0, speed); // must be negative
       if(motor == armElbowMotor){
-        if(position <= maxPosition){
+        if(position >= maxPosition){
           speed = Math.min(speed, PASSIVE_ELBOW_SPEED);
         }
       }
