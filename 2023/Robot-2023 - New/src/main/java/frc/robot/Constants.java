@@ -30,15 +30,17 @@ public interface Constants {
   public static final double DEADBAND = 0.001;
   public static final double RAMPING  = 0.9; // units per second
 
+  public static final double DEFAULT_RAMP_BAND = 0.1;
+
   // Autonomous positions before scoring (may need tuning)
 
   public final static double RAISE_ARM_FOR_SCORING       = -24514;
   public final static double EXTEND_ARM_FOR_SCORING      = -200000;
-  public final static double OPEN_GRABBER_FOR_SCORING    = -5.7;
+  public final static double OPEN_GRABBER_FOR_SCORING    = -3.9;          //ZS
 
   // Autonomous positions after scoring (may need tuning)
 
-  public final static double CLOSE_GRABBER_AFTER_SCORING = 1;
+  public final static double CLOSE_GRABBER_AFTER_SCORING = 4.9;           //ZS
   public final static double RETRACT_ARM_AFTER_SCORING   = 12000;
   public final static double LOWER_ARM_AFTER_SCORING     = -2000;
 

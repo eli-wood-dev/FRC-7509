@@ -69,8 +69,8 @@ public class Robot extends TimedRobot implements Constants {
   public double  MIN_POSITION_WINCH        = -250000;
   public double  MAX_POSITION_WINCH        = 12000;
   
-  public double  MIN_POSITION_GRABBER      = -5.7;
-  public double  MAX_POSITION_GRABBER      = 1;
+  public double  MIN_POSITION_GRABBER      = -3.9;
+  public double  MAX_POSITION_GRABBER      = 4.9;
 
   // Drive Train Motors
 
@@ -131,6 +131,9 @@ public class Robot extends TimedRobot implements Constants {
   long startTime;
   long leaveTime;
 
+  private static double rampBand = Constants.DEFAULT_RAMP_BAND; //EW 21 sep 2022
+  private static double previousMotorSpeed = 0.0;
+
 //================================================================ ROBOINIT ==========================================================================
 
   /**
@@ -167,6 +170,8 @@ public class Robot extends TimedRobot implements Constants {
     setFalconCurrentLimit(true, armWinchMotor, 35.0, 0.5); // Falcon 500
     rotatorMotor.setSmartCurrentLimit(25);                                                     // SparkMAX
     grabberMotor.setSmartCurrentLimit(25);                                                     // SparkMAX
+
+    
 
  // set up the NAVX card
 
@@ -498,7 +503,7 @@ public class Robot extends TimedRobot implements Constants {
   } // end driveAction()
 
   private void arcadeDrive(double speed, double turn){
-    robotDrive.arcadeDrive(forwardRamping(deadband(speed)), turnRamping(deadband(turn)));
+    robotDrive.arcadeDrive(applyRampBand(deadband(speed)), deadband(turn));
   }
 
   private void driveAction(double speed) {
@@ -596,6 +601,18 @@ public class Robot extends TimedRobot implements Constants {
 
   // Because slewRateLimiters filters have 'memory', each input stream requires its own filter object. 
   // DO NOT attempt to use the same filter object for multiple input streams.
+
+  private double applyRampBand(double motorSpeed) {
+    if (motorSpeed - previousMotorSpeed < -rampBand) {
+      motorSpeed = previousMotorSpeed - rampBand;
+    } // end if 
+    else if (motorSpeed - previousMotorSpeed > rampBand) {
+      motorSpeed = previousMotorSpeed + rampBand;
+    } // end else if
+  
+    previousMotorSpeed = motorSpeed; 
+    return motorSpeed;
+  }
 
   private SlewRateLimiter leftRateLimiter = new SlewRateLimiter(RAMPING);  // for left side of drivetrain only
   private double leftRamping (double speed) {                              // for left side of drivetrain only
