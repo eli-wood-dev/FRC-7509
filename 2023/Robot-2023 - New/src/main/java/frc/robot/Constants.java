@@ -40,7 +40,7 @@ public interface Constants {
 
   // Autonomous positions before scoring (may need tuning)
 
-  public final static double RAISE_ARM_FOR_SCORING       = -24514;
+  public final static double RAISE_ARM_FOR_SCORING       = -23514;
   public final static double EXTEND_ARM_FOR_SCORING      = -200000;
   public final static double OPEN_GRABBER_FOR_SCORING    = -3.9;          //ZS
 
@@ -48,7 +48,23 @@ public interface Constants {
 
   public final static double CLOSE_GRABBER_AFTER_SCORING = 4.9;           //ZS
   public final static double RETRACT_ARM_AFTER_SCORING   = 12000;
-  public final static double LOWER_ARM_AFTER_SCORING     = -2000;
+  public final static double LOWER_ARM_AFTER_SCORING     = -2050;
+
+  //soft limits
+
+  public double  MIN_POSITION_ROTATING_ARM = -40;
+  public double  MAX_POSITION_ROTATING_ARM = 40;
+  
+  public double  MIN_POSITION_ARM_ELBOW    = -23514; 
+  public double  MAX_POSITION_ARM_ELBOW    = -2050;
+  
+  public double  MIN_POSITION_WINCH        = -250000;
+  public double  MAX_POSITION_WINCH        = 12000;
+  
+  public double  MIN_POSITION_GRABBER      = -3.9;
+  public double  MAX_POSITION_GRABBER      = 4.9;
+
+  public static final double PASSIVE_ELBOW_SPEED = -0.1;
 
   // Autonomous motor speeds (all are positive here) (may need tuning)
 

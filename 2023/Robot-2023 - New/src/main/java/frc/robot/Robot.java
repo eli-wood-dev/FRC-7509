@@ -60,17 +60,7 @@ public class Robot extends TimedRobot implements Constants {
   //
   // (require tuning)
 
-  public double  MIN_POSITION_ROTATING_ARM = -40;
-  public double  MAX_POSITION_ROTATING_ARM = 40;
   
-  public double  MIN_POSITION_ARM_ELBOW    = -24514; 
-  public double  MAX_POSITION_ARM_ELBOW    = -2000;
-  
-  public double  MIN_POSITION_WINCH        = -250000;
-  public double  MAX_POSITION_WINCH        = 12000;
-  
-  public double  MIN_POSITION_GRABBER      = -3.9;
-  public double  MAX_POSITION_GRABBER      = 4.9;
 
   // Drive Train Motors
 
@@ -560,6 +550,11 @@ public class Robot extends TimedRobot implements Constants {
     if (safety){
       if      (position <= minPosition) speed = Math.max(0.0, speed); // must be positive
       else if (position >= maxPosition) speed = Math.min(0.0, speed); // must be negative
+      if(motor == armElbowMotor){
+        if(position <= maxPosition){
+          speed = Math.min(speed, PASSIVE_ELBOW_SPEED);
+        }
+      }
     }
     motor.set(deadband(speed));
 
