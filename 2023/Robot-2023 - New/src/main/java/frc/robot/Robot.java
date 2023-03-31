@@ -310,6 +310,7 @@ public class Robot extends TimedRobot implements Constants {
         // extend the arm to desired length
 
         else if (currentState == 1 && armWinchMotor.getSelectedSensorPosition() > EXTEND_ARM_FOR_SCORING) { // think of soft limits too
+          armElbowMotor.set(0);
           armWinchMotor.set(EXTEND_SPEED);
         } else if(currentState == 1){
           currentState++;
@@ -319,6 +320,7 @@ public class Robot extends TimedRobot implements Constants {
 
         else if (currentState == 2 && grabberMotor.getEncoder().getPosition() > OPEN_GRABBER_FOR_SCORING) { // think of soft limits too
           grabberMotor.set(GRABBER_SPEED);
+          armWinchMotor.set(0);
           // release the cone or cube
         } else if(currentState == 2){
           currentState++;
@@ -337,6 +339,7 @@ public class Robot extends TimedRobot implements Constants {
 
         else if (currentState == 4 && armWinchMotor.getSelectedSensorPosition() < RETRACT_ARM_AFTER_SCORING) { // think of soft limits too
           armWinchMotor.set(RETRACT_SPEED); // <== set the speed for extending the arm
+          grabberMotor.set(0);
         } else if(currentState == 4){
           currentState++;
         }// end else if
@@ -345,6 +348,7 @@ public class Robot extends TimedRobot implements Constants {
 
         else if (currentState == 5 && armElbowMotor.getSelectedSensorPosition() < LOWER_ARM_AFTER_SCORING) { // think about soft limits too
           armElbowMotor.set(-ARM_ELBOW_SPEED); // <== set the speed for the arm
+          armWinchMotor.set(0);
         } else if(currentState == 5){
           currentState++;
         }// end if
@@ -353,6 +357,7 @@ public class Robot extends TimedRobot implements Constants {
 
         else {
           if(STATION != 4){
+            armElbowMotor.set(0);
            if (AUTONOMOUS_CLIMB) autonomousState = START_CLIMB; else autonomousState = LEAVE;
           }
         } // end if
@@ -437,6 +442,8 @@ public class Robot extends TimedRobot implements Constants {
         autonomousState = DONE;
 
     } // end switch
+
+    driveAction(0.0); setBrakes(true);
 
     SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
 
@@ -781,14 +788,14 @@ public class Robot extends TimedRobot implements Constants {
     }
 
     // test grabber opening and closing --------------------------------------------------------------------------------------------------------------
-
+    /* 
     {
       double speed = deadband(xBoxOperator.getRightX());
       if (speed > DEADBAND) System.out.println("9a - grabber opening " + speed);
       if (speed < DEADBAND) System.out.println("9b - grabber closing " + speed);
       grabberMotor.set(speed); // can open or close
     }
-
+    */
     // test pitch, roll, yaw -------------------------------------------------------------------------------------------------------------------------
 
     // move the robot at different angles to see what the NavX card pitch, roll and yaw values are in the SmartDashboard
