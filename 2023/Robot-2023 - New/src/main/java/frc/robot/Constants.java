@@ -32,6 +32,8 @@ public interface Constants {
 
   public static final double DEFAULT_RAMP_BAND = 0.1;
 
+  public static final double RAMP_RATE = 3;
+
   // Autonomous positions before scoring (may need tuning)
 
   public final static double RAISE_ARM_FOR_SCORING       = -24514;

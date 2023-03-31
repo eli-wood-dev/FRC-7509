@@ -503,7 +503,7 @@ public class Robot extends TimedRobot implements Constants {
   } // end driveAction()
 
   private void arcadeDrive(double speed, double turn){
-    robotDrive.arcadeDrive(applyRampBand(deadband(speed)), deadband(turn));
+    robotDrive.arcadeDrive(lerp(previousMotorSpeed, deadband(speed), RAMP_RATE), deadband(turn));
   }
 
   private void driveAction(double speed) {
@@ -613,6 +613,12 @@ public class Robot extends TimedRobot implements Constants {
     previousMotorSpeed = motorSpeed; 
     return motorSpeed;
   }
+
+  private double lerp(double a, double b, double f)
+{
+    previousMotorSpeed = a;
+    return a * (1.0 - f) + (b * f);
+}
 
   private SlewRateLimiter leftRateLimiter = new SlewRateLimiter(RAMPING);  // for left side of drivetrain only
   private double leftRamping (double speed) {                              // for left side of drivetrain only
