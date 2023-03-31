@@ -132,7 +132,8 @@ public class Robot extends TimedRobot implements Constants {
   long leaveTime;
 
   private static double rampBand = Constants.DEFAULT_RAMP_BAND; //EW 21 sep 2022
-  private static double previousMotorSpeed = 0.0;
+  private double previousMotorSpeed = 0.0;
+  private double previousTurnSpeed = 0.0;
 
 //================================================================ ROBOINIT ==========================================================================
 
@@ -503,7 +504,9 @@ public class Robot extends TimedRobot implements Constants {
   } // end driveAction()
 
   private void arcadeDrive(double speed, double turn){
-    robotDrive.arcadeDrive(lerp(previousMotorSpeed, deadband(speed), RAMP_RATE), deadband(turn));
+    previousMotorSpeed = lerp(previousMotorSpeed, deadband(speed) * MAX_SPEED, RAMP_RATE);
+    previousTurnSpeed = lerp(previousTurnSpeed, deadband(turn) * MAX_TURN_SPEED, TURN_RAMP_RATE);
+    robotDrive.arcadeDrive(previousMotorSpeed, lerp(previousTurnSpeed, deadband(turn), TURN_RAMP_RATE));
   }
 
   private void driveAction(double speed) {
@@ -615,10 +618,9 @@ public class Robot extends TimedRobot implements Constants {
   }
 
   private double lerp(double a, double b, double f){
-    previousMotorSpeed = a;
     double newSpeed = a * (1.0 - f) + (b * f);
 
-    previousMotorSpeed = newSpeed;
+    //a = newSpeed;
     return newSpeed;
   }
 

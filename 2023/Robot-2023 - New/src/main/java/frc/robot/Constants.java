@@ -33,6 +33,10 @@ public interface Constants {
   public static final double DEFAULT_RAMP_BAND = 0.1;
 
   public static final double RAMP_RATE = 0.05;
+  public static final double TURN_RAMP_RATE = 0.05;
+
+  public static final double MAX_SPEED = 1;
+  public static final double MAX_TURN_SPEED = 0.9;
 
   // Autonomous positions before scoring (may need tuning)
 
