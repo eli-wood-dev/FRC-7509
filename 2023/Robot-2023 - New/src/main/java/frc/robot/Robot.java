@@ -310,7 +310,7 @@ public class Robot extends TimedRobot implements Constants {
         // extend the arm to desired length
 
         else if (currentState == 1 && armWinchMotor.getSelectedSensorPosition() > EXTEND_ARM_FOR_SCORING) { // think of soft limits too
-          armElbowMotor.set(0);
+          //armElbowMotor.set(0);  removed bc too early ZS
           armWinchMotor.set(EXTEND_SPEED);
         } else if(currentState == 1){
           currentState++;
@@ -351,6 +351,7 @@ public class Robot extends TimedRobot implements Constants {
           armWinchMotor.set(0);
         } else if(currentState == 5){
           currentState++;
+          armElbowMotor.set(0); //after scoring, turn off power ZS
         }// end if
 
         // move on to either climbing or leaving the community at the end of autonomous

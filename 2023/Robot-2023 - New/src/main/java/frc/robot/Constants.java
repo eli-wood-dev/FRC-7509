@@ -46,7 +46,7 @@ public interface Constants {
 
   // Autonomous positions after scoring (may need tuning)
 
-  public final static double CLOSE_GRABBER_AFTER_SCORING = 4.9;           //ZS
+  public final static double CLOSE_GRABBER_AFTER_SCORING = 2;           //ZS
   public final static double RETRACT_ARM_AFTER_SCORING   = -1;
   public final static double LOWER_ARM_AFTER_SCORING     = -2050;
 
