@@ -32,7 +32,7 @@ public interface Constants {
 
   public static final double DEFAULT_RAMP_BAND = 0.1;
 
-  public static final double RAMP_RATE = 3;
+  public static final double RAMP_RATE = 0.05;
 
   // Autonomous positions before scoring (may need tuning)
 

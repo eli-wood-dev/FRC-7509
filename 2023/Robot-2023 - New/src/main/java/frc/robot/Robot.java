@@ -614,11 +614,13 @@ public class Robot extends TimedRobot implements Constants {
     return motorSpeed;
   }
 
-  private double lerp(double a, double b, double f)
-{
+  private double lerp(double a, double b, double f){
     previousMotorSpeed = a;
-    return a * (1.0 - f) + (b * f);
-}
+    double newSpeed = a * (1.0 - f) + (b * f);
+
+    previousMotorSpeed = newSpeed;
+    return newSpeed;
+  }
 
   private SlewRateLimiter leftRateLimiter = new SlewRateLimiter(RAMPING);  // for left side of drivetrain only
   private double leftRamping (double speed) {                              // for left side of drivetrain only
