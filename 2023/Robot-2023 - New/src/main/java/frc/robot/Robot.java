@@ -275,9 +275,21 @@ public class Robot extends TimedRobot implements Constants {
   public void autonomousPeriodic() {
 
     SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
-    driveAction(0.0); setBrakes(true);
     
     switch (autonomousState) {
+
+      case NOTHING:
+        setBrakes(true);
+        rightMotor2.set(0);
+        rightMotor1.set(0);
+        leftMotor2.set(0);
+        leftMotor1.set(0);
+        armElbowMotor.set(0);
+        armWinchMotor.set(0);
+        rotatorMotor.set(0);
+        grabberMotor.set(0);
+        
+        break;
  
       case START:
 
@@ -427,8 +439,12 @@ public class Robot extends TimedRobot implements Constants {
       case LEAVE:
 
           // now leave the station that you are at
-         if((getTime() - leaveTime) <= STATION_LEAVE_TIME) driveAction(STATION_LEAVE_SPEED); // drive forward for a time then done
-         break;
+        if((getTime() - leaveTime) <= STATION_LEAVE_TIME) {
+          driveAction(STATION_LEAVE_SPEED);
+        } else{
+          autonomousState = NOTHING;
+        } // drive forward for a time then done
+        break;
 
       default:
 
