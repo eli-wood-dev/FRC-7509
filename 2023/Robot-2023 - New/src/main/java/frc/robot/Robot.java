@@ -301,7 +301,7 @@ public class Robot extends TimedRobot implements Constants {
 
         
 
-        if (currentState == 0 && armElbowMotor.getSelectedSensorPosition() > RAISE_ARM_FOR_SCORING) { // think about soft limits too
+        if (currentState <5 && armElbowMotor.getSelectedSensorPosition() > RAISE_ARM_FOR_SCORING) { // changed from ==0 to <5 to keep arm up
           armElbowMotor.set(ARM_ELBOW_SPEED);
         } else if(currentState == 0){
           currentState++;
@@ -310,7 +310,7 @@ public class Robot extends TimedRobot implements Constants {
         // extend the arm to desired length
 
         else if (currentState == 1 && armWinchMotor.getSelectedSensorPosition() > EXTEND_ARM_FOR_SCORING) { // think of soft limits too
-          //armElbowMotor.set(0);  removed bc too early ZS
+          armElbowMotor.set(0);  //removed bc too early ZS
           armWinchMotor.set(EXTEND_SPEED);
         } else if(currentState == 1){
           currentState++;
@@ -347,7 +347,7 @@ public class Robot extends TimedRobot implements Constants {
         // lower arm after scoring
 
         else if (currentState == 5 && armElbowMotor.getSelectedSensorPosition() < LOWER_ARM_AFTER_SCORING) { // think about soft limits too
-          armElbowMotor.set(-ARM_ELBOW_SPEED); // <== set the speed for the arm
+          armElbowMotor.set(ARM_ELBOW_LOWER_SPEED); // <== set the speed for the arm
           armWinchMotor.set(0);
         } else if(currentState == 5){
           currentState++;

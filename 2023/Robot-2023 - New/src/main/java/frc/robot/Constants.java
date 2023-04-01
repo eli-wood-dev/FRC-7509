@@ -46,7 +46,7 @@ public interface Constants {
 
   // Autonomous positions after scoring (may need tuning)
 
-  public final static double CLOSE_GRABBER_AFTER_SCORING = 2;           //ZS
+  public final static double CLOSE_GRABBER_AFTER_SCORING = 2;           //ZS changed bc not reaching prev va
   public final static double RETRACT_ARM_AFTER_SCORING   = -1;
   public final static double LOWER_ARM_AFTER_SCORING     = -2050;
 
@@ -72,6 +72,7 @@ public interface Constants {
   public static final double  EXTEND_SPEED               = -0.50;
   public static final double  RETRACT_SPEED              = 0.50;
   public static final double  ARM_ELBOW_SPEED            = -0.25;
+  public static final double  ARM_ELBOW_LOWER_SPEED      = 0.1;
   public static final double  LEVEL_TOLERANCE            = 10.0; // degrees, -LEVEL_TOLERANCE .. +LEVEL_TOLERANCE indicates level <== adjust as required
 
   // Autonomous defaults about whether to climb and which station the robot starts at
