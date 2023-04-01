@@ -44,7 +44,7 @@ public class Robot extends TimedRobot implements Constants {
   // Pseudo-constants (all are positive here) - set once in dashboard before autononousInit() (require tuning)
   
   public boolean AUTONOMOUS_CLIMB          = false; // assume climb is on!
-  public int     STATION                   = 0;    // assume station 2 (best for climb)
+  public int     STATION                   = 1;    // assume station 2 (best for climb)
   
   public long    CLIMB_REVERSE_TIME        = 3000; // milliseconds
   public double  CLIMB_REVERSE_SPEED       = 0.30;
@@ -275,6 +275,7 @@ public class Robot extends TimedRobot implements Constants {
   public void autonomousPeriodic() {
 
     SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
+    driveAction(0.0); setBrakes(true);
     
     switch (autonomousState) {
  
@@ -351,7 +352,7 @@ public class Robot extends TimedRobot implements Constants {
           armElbowMotor.set(ARM_ELBOW_LOWER_SPEED); // <== set the speed for the arm
           armWinchMotor.set(0);
         } else if(currentState == 5){
-          currentState++;
+          //currentState++;
         }// end if
 
         // move on to either climbing or leaving the community at the end of autonomous
@@ -360,11 +361,13 @@ public class Robot extends TimedRobot implements Constants {
           armElbowMotor.set(0);
           if(STATION != 4){
             
-           if (AUTONOMOUS_CLIMB) autonomousState = START_CLIMB; 
-           else {
-            autonomousState = LEAVE;
-            leaveTime = getTime();
-          }
+            if (AUTONOMOUS_CLIMB) {
+              autonomousState = START_CLIMB; 
+            }
+            else {
+              autonomousState = LEAVE;
+              leaveTime = getTime();
+            }
           }
         } // end if
 
@@ -433,7 +436,7 @@ public class Robot extends TimedRobot implements Constants {
 
     } // end switch
 
-    driveAction(0.0); setBrakes(true);
+    
 
     SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
 
@@ -492,7 +495,7 @@ public class Robot extends TimedRobot implements Constants {
   private void arcadeDrive(double speed, double turn){
     previousMotorSpeed = lerp(previousMotorSpeed, deadband(speed) * MAX_SPEED, RAMP_RATE);
     previousTurnSpeed = lerp(previousTurnSpeed, deadband(turn) * MAX_TURN_SPEED, TURN_RAMP_RATE);
-    robotDrive.arcadeDrive(previousMotorSpeed, lerp(previousTurnSpeed, deadband(turn), TURN_RAMP_RATE));
+    robotDrive.arcadeDrive(previousMotorSpeed,  lerp(previousTurnSpeed, deadband(turn), TURN_RAMP_RATE));
   }
 
   private void driveAction(double speed) {
@@ -564,13 +567,13 @@ public class Robot extends TimedRobot implements Constants {
 
   private void setBrakes(boolean applyBrakes) {
    
-    if ((! brakeState) && applyBrakes) {
+    if (applyBrakes) {
       leftMotor1.setNeutralMode(NeutralMode.Brake);    leftMotor2.setNeutralMode(NeutralMode.Brake);
       rightMotor1.setNeutralMode(NeutralMode.Brake);    rightMotor2.setNeutralMode(NeutralMode.Brake);
       brakeState = true;
     } // end if
 
-    else if (brakeState) {
+    else {
       leftMotor1.setNeutralMode(NeutralMode.Coast);    leftMotor2.setNeutralMode(NeutralMode.Coast);
       rightMotor1.setNeutralMode(NeutralMode.Coast);    rightMotor2.setNeutralMode(NeutralMode.Coast);
       brakeState = false;  
