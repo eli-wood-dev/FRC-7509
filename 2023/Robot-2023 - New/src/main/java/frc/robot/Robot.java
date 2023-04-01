@@ -221,7 +221,7 @@ public class Robot extends TimedRobot implements Constants {
 
     // update these pseudo-constants on the SmartDashboard before autonomousInit() starts, then use those values for the duration
 
-    AUTONOMOUS_CLIMB      =        SmartDashboard.getBoolean("climb",                true);
+    AUTONOMOUS_CLIMB      =        SmartDashboard.getBoolean("climb",                false);
     STATION               = (int)  SmartDashboard.getNumber ("station",              0);
     
     CLIMB_REVERSE_TIME    = (long) SmartDashboard.getNumber ("reverse climb time",   0);
@@ -281,6 +281,7 @@ public class Robot extends TimedRobot implements Constants {
       case START:
 
         if(STATION == 5){
+          leaveTime = getTime();
           autonomousState = LEAVE;
         } else{
           autonomousState = CUBE;
@@ -351,15 +352,19 @@ public class Robot extends TimedRobot implements Constants {
           armWinchMotor.set(0);
         } else if(currentState == 5){
           currentState++;
-          armElbowMotor.set(0); //after scoring, turn off power ZS
         }// end if
 
         // move on to either climbing or leaving the community at the end of autonomous
 
         else {
+          armElbowMotor.set(0);
           if(STATION != 4){
-            armElbowMotor.set(0);
-           if (AUTONOMOUS_CLIMB) autonomousState = START_CLIMB; else autonomousState = LEAVE;
+            
+           if (AUTONOMOUS_CLIMB) autonomousState = START_CLIMB; 
+           else {
+            autonomousState = LEAVE;
+            leaveTime = getTime();
+          }
           }
         } // end if
 
@@ -375,7 +380,7 @@ public class Robot extends TimedRobot implements Constants {
         // set the timer for timed drive-forward action
 
         startClimbTime  = getTime();
-        autonomousState = CLIMB;
+        //autonomousState = CLIMB; climb does not work
         break;
 
       case CLIMB:
@@ -413,34 +418,18 @@ public class Robot extends TimedRobot implements Constants {
 
         if      (navX.getRoll() < -LEVEL_TOLERANCE) driveAction(-CLIMB_FORWARD_SPEED); // front end is pointing downward, reverse a little pitch and roll are reversed
         else if (navX.getRoll() > LEVEL_TOLERANCE)  driveAction( CLIMB_FORWARD_SPEED); //front end is pointing upward, forward a little ^
-        else                                         autonomousState = DONE;            // balanced, all done
 
         break;
 
       case LEAVE:
 
-         leaveTime = getTime(); // now leave the station that you are at
+          // now leave the station that you are at
          if((getTime() - leaveTime) <= STATION_LEAVE_TIME) driveAction(STATION_LEAVE_SPEED); // drive forward for a time then done
-        else                                                autonomousState = DONE;             // done
          break;
-
-      case DONE:
-
-        driveAction(0.0); setBrakes(true); // stop, apply brakes and wait until autonomous ends
-
-        if ((getTime() - startTime) > AUTONOMOUS_TIME) autonomousState = EXIT; // hang around until autonomous ends
-
-        break;
-
-      case EXIT:
-
-        // all done with autonomous, remove the brakes on the drive train - teleOperation starts
-        setBrakes(false);
-        break;
 
       default:
 
-        autonomousState = DONE;
+        break;
 
     } // end switch
 

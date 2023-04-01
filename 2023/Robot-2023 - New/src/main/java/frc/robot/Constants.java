@@ -97,8 +97,6 @@ public interface Constants {
   final int CLIMB       = 7;
   final int BALANCE     = 8;
   final int LEAVE       = 9;
-  final int DONE        = 10;
-  final int EXIT        = 11;
   final int NOTHING     = 13;
 
   final String[] MNEMONIC_AUTONOMOUS_STATES = {"start", "station 1", "station 2", "station 3", "cone", "cube",
