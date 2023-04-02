@@ -35,6 +35,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import java.lang.Math;
+
 /**
  * This robot uses the DifferentialDrive class and runs the motors with tank drive steering using an xBoxController.
  */
@@ -51,8 +53,8 @@ public class Robot extends TimedRobot implements Constants {
   public long    CLIMB_FORWARD_TIME        = 3000; // milliseconds
   public double  CLIMB_FORWARD_SPEED       = 0.11;
 
-  public long    STATION_LEAVE_TIME      = 5000; // milliseconds
-  public double  STATION_LEAVE_SPEED     = 0.30;
+  public long    STATION_LEAVE_TIME      = 7000; // milliseconds
+  public double  STATION_LEAVE_SPEED     = Math.sqrt(Math.pow(-0.30, 2) * 1.75);
   
   // Pseudo-constants for soft-limits on motors - these should give the initial positions and soft limits for
   // each of these motors use the 2023 Soft Limits spreadsheet to store and calculate when tuning these settings
@@ -219,6 +221,8 @@ public class Robot extends TimedRobot implements Constants {
   @Override
   public void autonomousInit() {
 
+    currentState = 0;
+
     // update these pseudo-constants on the SmartDashboard before autonomousInit() starts, then use those values for the duration
 
     AUTONOMOUS_CLIMB      =        SmartDashboard.getBoolean("climb",                false);
@@ -274,16 +278,13 @@ public class Robot extends TimedRobot implements Constants {
   @Override
   public void autonomousPeriodic() {
 
-    SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
+    //SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
     
     switch (autonomousState) {
 
       case NOTHING:
         setBrakes(true);
-        rightMotor2.set(0);
-        rightMotor1.set(0);
-        leftMotor2.set(0);
-        leftMotor1.set(0);
+        driveAction(0);
         armElbowMotor.set(0);
         armWinchMotor.set(0);
         rotatorMotor.set(0);
@@ -364,13 +365,14 @@ public class Robot extends TimedRobot implements Constants {
           armElbowMotor.set(ARM_ELBOW_LOWER_SPEED); // <== set the speed for the arm
           armWinchMotor.set(0);
         } else if(currentState == 5){
-          //currentState++;
+          armElbowMotor.set(0);
+          currentState++;
         }// end if
 
         // move on to either climbing or leaving the community at the end of autonomous
 
         else {
-          armElbowMotor.set(0);
+          //armElbowMotor.set(0);
           if(STATION != 4){
             
             if (AUTONOMOUS_CLIMB) {
@@ -454,7 +456,7 @@ public class Robot extends TimedRobot implements Constants {
 
     
 
-    SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
+    //SmartDashboard.putString("autonomous state", MNEMONIC_AUTONOMOUS_STATES[autonomousState]);
 
     updateSmartDashboard();
 
@@ -503,11 +505,6 @@ public class Robot extends TimedRobot implements Constants {
 
   // drive the robot applying ramping as required
 
-  private void driveAction(double leftSpeed, double rightSpeed) {
-    robotDrive.tankDrive(leftRamping(deadband(leftSpeed)), rightRamping(deadband(rightSpeed)));
-    //robotDrive.tankDrive(deadband(leftSpeed), deadband(rightSpeed));
-  } // end driveAction()
-
   private void arcadeDrive(double speed, double turn){
     previousMotorSpeed = lerp(previousMotorSpeed, deadband(speed) * MAX_SPEED, RAMP_RATE);
     previousTurnSpeed = lerp(previousTurnSpeed, deadband(turn) * MAX_TURN_SPEED, TURN_RAMP_RATE);
@@ -515,7 +512,7 @@ public class Robot extends TimedRobot implements Constants {
   }
 
   private void driveAction(double speed) {
-    robotDrive.tankDrive(speed, speed);
+    robotDrive.arcadeDrive(speed, 0);
   } // end driveAction()
 
 
@@ -739,20 +736,6 @@ public class Robot extends TimedRobot implements Constants {
       cameraSelection.setString(camera2.getName());
       SmartDashboard.putString("camera", "rear");
     } // end else if
-
-    // check the two joysticks for left and right side drivetrain operation --------------------------------------------------------------------------
-    {
-      double leftSpeed = leftRamping(deadband(xBoxDriver.getLeftY()));
-      double rightSpeed = rightRamping(deadband(xBoxDriver.getRightY()));
-
-      if ((leftSpeed > 0.0 || rightSpeed > 0.0)) {
-        driveAction(leftSpeed, rightSpeed);
-        System.out.println("3 - driving: left " + leftSpeed + ", right " + rightSpeed);
-      } // end if
-      else {
-        driveAction(0.0, 0.0);
-      } // end else
-    }
 
     // Check the B button to turn on the drive train brakes ------------------------------------------------------------------------------------------
 

@@ -99,8 +99,8 @@ public interface Constants {
   final int LEAVE       = 9;
   final int NOTHING     = 13;
 
-  final String[] MNEMONIC_AUTONOMOUS_STATES = {"start", "station 1", "station 2", "station 3", "cone", "cube",
-                                               "start climb", "climb", "balance", "leave", "done", "exit"};
+  //final String[] MNEMONIC_AUTONOMOUS_STATES = {"start", "station 1", "station 2", "station 3", "cone", "cube",
+  //                                             "start climb", "climb", "balance", "leave", "done", "exit"};
 
   // Button mappings for robot actions by driver and operator are shown below.
   //
