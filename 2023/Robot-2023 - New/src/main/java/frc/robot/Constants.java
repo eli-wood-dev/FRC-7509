@@ -55,7 +55,7 @@ public interface Constants {
   public double  MIN_POSITION_ROTATING_ARM = -40;
   public double  MAX_POSITION_ROTATING_ARM = 40;
   
-  public double  MIN_POSITION_ARM_ELBOW    = -24514; 
+  public double  MIN_POSITION_ARM_ELBOW    = -24514 * 1.1; //calibrate to high cone
   public double  MAX_POSITION_ARM_ELBOW    = -2050;
   
   public double  MIN_POSITION_WINCH        = -278000;
